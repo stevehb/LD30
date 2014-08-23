@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Pool;
 
 public class Message implements Pool.Poolable {
     public enum Type {
+        INPUT,
         UPDATE_PULSE;
     }
     public Message.Type type;

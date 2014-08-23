@@ -7,6 +7,7 @@ import com.robotfriendgames.ld30.game.GameEntity;
 
 public class Component implements MessageReceiver, Pool.Poolable {
     public enum Type {
+        PLAYER_CONTROL(PlayerControlComponent.class),
         RENDERABLE(RenderableComponent.class);
 
         private Class<? extends Component> componentClass;
@@ -31,7 +32,7 @@ public class Component implements MessageReceiver, Pool.Poolable {
         this.parent = parent;
     }
 
-    public void act(float delta) { }
+    public void update(float delta) { }
 
     @Override
     public void receive(Message msg) { }
