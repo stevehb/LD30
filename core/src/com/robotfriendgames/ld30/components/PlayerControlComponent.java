@@ -27,6 +27,10 @@ public class PlayerControlComponent extends Component {
     @Override
     public void reset() {
         super.reset();
+        left.reset();
+        right.reset();
+        space.reset();
+        mouse.reset();
         LD30.post.removeReceiver(this);
     }
 
@@ -37,7 +41,6 @@ public class PlayerControlComponent extends Component {
             storeInput((KeyState) msg.data);
             break;
         }
-
     }
 
     private void storeInput(KeyState state) {

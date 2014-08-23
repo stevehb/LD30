@@ -7,6 +7,7 @@ import com.robotfriendgames.ld30.game.GameEntity;
 
 public class Component implements MessageReceiver, Pool.Poolable {
     public enum Type {
+        INTRO_CONTROL(IntroControlComponent.class),
         PLAYER_CONTROL(PlayerControlComponent.class),
         RENDERABLE(RenderableComponent.class);
 

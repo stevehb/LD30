@@ -6,6 +6,7 @@ import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.KeyState;
 
 public class InputProcessor extends InputAdapter {
+    public static final String TAG = InputProcessor.class.getSimpleName();
     private KeyState tmp;
 
     public InputProcessor() {

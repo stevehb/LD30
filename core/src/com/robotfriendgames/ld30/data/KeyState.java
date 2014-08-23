@@ -5,6 +5,15 @@ public class KeyState {
     public boolean pressed;
     public long eventTime;
 
+    @Override
+    public String toString() {
+        return "KeyState{" +
+                "key=" + key +
+                ", pressed=" + pressed +
+                ", eventTime=" + eventTime +
+                '}';
+    }
+
     public void set(KeyState state) {
         key = state.key;
         pressed = state.pressed;

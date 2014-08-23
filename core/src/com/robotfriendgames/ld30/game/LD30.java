@@ -1,6 +1,7 @@
 package com.robotfriendgames.ld30.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.Array;
 import com.robotfriendgames.ld30.comm.PostOffice;
 import com.robotfriendgames.ld30.data.Data;
 import com.robotfriendgames.ld30.data.Images;
@@ -33,6 +34,7 @@ public class LD30 {
         images = Images.load();
         settings = Settings.load();
         data = new Data();
+        data.entities = new Array<GameEntity>(false, 64, GameEntity.class);
 
         post = new PostOffice();
 

@@ -14,6 +14,8 @@ import com.robotfriendgames.ld30.data.AnimationData;
 import com.robotfriendgames.ld30.data.RenderLevel;
 
 public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
+    public static final String TAG = GameEntity.class.getSimpleName();
+
     protected Array<Component> components;
     protected Array<Action> actions;
     protected AnimationData animData;
@@ -57,18 +59,16 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
             if(frameIdx > animData.frames.length) {
                 frameIdx = 0;
             }
+            TextureRegion region = animData.frames[frameIdx];
+            setSize(region.getRegionWidth(), region.getRegionHeight());
         }
     }
 
-    public void render(Batch batch) {
+    @Override
+    public void draw(Batch batch) {
         if(LD30.data.renderLevel == renderLevel) {
-            TextureRegion region = animData.frames[frameIdx];
-            batch.draw(region,
-                    getX(), getY(),
-                    getOriginX(), getOriginY(),
-                    getWidth(), getHeight(),
-                    getScaleX(), getScaleY(),
-                    getRotation());
+            setRegion(animData.frames[frameIdx]);
+            super.draw(batch);
         }
     }
 
@@ -87,20 +87,20 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
 
     public void setAnimData(AnimationData animData) {
         this.animData = animData;
+        TextureRegion region = this.animData.frames[frameIdx];
+        setSize(region.getRegionWidth(), region.getRegionHeight());
     }
 
     public AnimationData getAnimData() {
         return animData;
     }
 
-    public float getWidth() {
-        TextureRegion region = animData.frames[frameIdx];
-        return region.getRegionWidth();
+    public void setRenderLevel(RenderLevel renderLevel) {
+        this.renderLevel = renderLevel;
     }
 
-    public float getHeight() {
-        TextureRegion region = animData.frames[frameIdx];
-        return region.getRegionHeight();
+    public RenderLevel getRenderLevel() {
+        return renderLevel;
     }
 
     public void addAction(Action action) {
