@@ -3,7 +3,7 @@ package com.robotfriendgames.ld30.components;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.KeyState;
 import com.robotfriendgames.ld30.game.GameEntity;
-import com.robotfriendgames.ld30.game.LD30;
+import com.robotfriendgames.ld30.game.LD;
 
 public class IntroControlComponent extends Component {
     public boolean hasUp;
@@ -13,17 +13,17 @@ public class IntroControlComponent extends Component {
     }
 
     public static IntroControlComponent apply(GameEntity parent) {
-        IntroControlComponent pcc = LD30.componentPool.obtain(Type.INTRO_CONTROL);
-        pcc.setParent(parent);
-        LD30.post.addReceiver(pcc);
-        return pcc;
+        IntroControlComponent icc = LD.componentPool.obtain(Type.INTRO_CONTROL);
+        icc.setParent(parent);
+        LD.post.addReceiver(icc);
+        return icc;
     }
 
     @Override
     public void reset() {
         super.reset();
         hasUp = false;
-        LD30.post.removeReceiver(this);
+        LD.post.removeReceiver(this);
     }
 
     @Override

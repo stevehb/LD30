@@ -23,17 +23,18 @@ public class InputProcessor extends InputAdapter {
         tmp.key = keycode;
         tmp.pressed = true;
         tmp.eventTime = Gdx.input.getCurrentEventTime();
-        LD30.post.send(Message.Type.INPUT, tmp);
+        LD.post.send(Message.Type.INPUT, tmp);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.R) {
-            LD30.settings = Settings.load();
-            Array<PhysicsComponent> array = LD30.componentPool.getActive(Component.Type.PHYSICS);
+            LD.settings = Settings.load();
+            Array<PhysicsComponent> array = LD.componentPool.getActive(Component.Type.PHYSICS);
             for(int i = 0; i < array.size; i++) {
                 array.get(i).copySettingsData();
+                array.get(i).body.setActive(true);
             }
             return true;
         }
@@ -41,7 +42,7 @@ public class InputProcessor extends InputAdapter {
         tmp.key = keycode;
         tmp.pressed = false;
         tmp.eventTime = Gdx.input.getCurrentEventTime();
-        LD30.post.send(Message.Type.INPUT, tmp);
+        LD.post.send(Message.Type.INPUT, tmp);
         return true;
     }
 
@@ -50,7 +51,7 @@ public class InputProcessor extends InputAdapter {
         tmp.key = button;
         tmp.pressed = true;
         tmp.eventTime = Gdx.input.getCurrentEventTime();
-        LD30.post.send(Message.Type.INPUT, tmp);
+        LD.post.send(Message.Type.INPUT, tmp);
         return true;
     }
 
@@ -59,7 +60,7 @@ public class InputProcessor extends InputAdapter {
         tmp.key = button;
         tmp.pressed = false;
         tmp.eventTime = Gdx.input.getCurrentEventTime();
-        LD30.post.send(Message.Type.INPUT, tmp);
+        LD.post.send(Message.Type.INPUT, tmp);
         return true;
     }
 }

@@ -1,54 +1,25 @@
 package com.robotfriendgames.ld30.logic;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
+import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.components.Component;
-import com.robotfriendgames.ld30.components.PhysicsComponent;
-import com.robotfriendgames.ld30.components.PlayerControlComponent;
-import com.robotfriendgames.ld30.game.GameEntity;
-import com.robotfriendgames.ld30.game.LD30;
+import com.robotfriendgames.ld30.components.PlayerInputComponent;
+import com.robotfriendgames.ld30.components.PlayerStateComponent;
+import com.robotfriendgames.ld30.game.LD;
 
 public class PlayerLogic {
     public static final String TAG = PlayerLogic.class.getSimpleName();
 
-    private GameEntity player;
-    private boolean isFlipped;
-
-    public PlayerLogic(GameEntity player) {
-        this.player = player;
-    }
-
     public void update(float delta) {
-        PlayerControlComponent pcc = (PlayerControlComponent) player.getComponent(Component.Type.PLAYER_CONTROL);
-        PhysicsComponent pc = (PhysicsComponent) player.getComponent(Component.Type.PHYSICS);
-        Vector2 vel = pc.body.getLinearVelocity();
-        Vector2 pos = pc.body.getPosition();
-
-        boolean underHorzMaxVel = Math.abs(vel.x) < LD30.settings.playerHorzMaxVel;
-        if(pcc.left.pressed && underHorzMaxVel) {
-            pc.body.applyLinearImpulse(-LD30.settings.playerHorzAccel, 0, pos.x, pos.y, true);
+        PlayerInputComponent pic = (PlayerInputComponent) LD.data.player.getComponent(Component.Type.PLAYER_CONTROL);
+        PlayerStateComponent psc = (PlayerStateComponent) LD.data.player.getComponent(Component.Type.PLAYER_STATE);
+        if(pic.left.pressed) {
+            LD.post.send(Message.Type.PLAYER_MOVE_LEFT, null);
         }
-        if(pcc.right.pressed && underHorzMaxVel) {
-            pc.body.applyLinearImpulse(LD30.settings.playerHorzAccel, 0, pos.x, pos.y, true);
+        if(pic.right.pressed) {
+            LD.post.send(Message.Type.PLAYER_MOVE_RIGHT, null);
         }
-        if(pcc.space.pressed && pc.inContact) {
-            pc.body.applyLinearImpulse(0, LD30.settings.playerJumpAccel, pos.x, pos.y, true);
-            pcc.space.pressed = false;
+        if(pic.space.pressed && psc.inContact) {
+            LD.post.send(Message.Type.PLAYER_JUMP, null);
         }
-
-        //Gdx.app.log(TAG, "tracking body=(" + (int)pos.x + "," + (int)pos.y + ") vel=(" + (int)vel.x + "," + (int)vel.y + ")");
-
-        if(!isFlipped && vel.x < 1) {
-            Gdx.app.log(TAG, "reversing X to left");
-            player.flip(true, false);
-            isFlipped = true;
-        }
-        if(isFlipped && vel.x > 1) {
-            Gdx.app.log(TAG, "reversing X to right");
-            player.flip(true, false);
-            isFlipped = false;
-        }
-
     }
-
 }

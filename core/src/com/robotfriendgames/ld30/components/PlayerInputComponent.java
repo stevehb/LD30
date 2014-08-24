@@ -4,12 +4,12 @@ import com.badlogic.gdx.Input;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.KeyState;
 import com.robotfriendgames.ld30.game.GameEntity;
-import com.robotfriendgames.ld30.game.LD30;
+import com.robotfriendgames.ld30.game.LD;
 
-public class PlayerControlComponent extends Component {
+public class PlayerInputComponent extends Component {
     public KeyState left, right, space, mouse;
 
-    public PlayerControlComponent() {
+    public PlayerInputComponent() {
         super(Component.Type.PLAYER_CONTROL);
         left = new KeyState();
         right = new KeyState();
@@ -17,11 +17,11 @@ public class PlayerControlComponent extends Component {
         mouse = new KeyState();
     }
 
-    public static PlayerControlComponent apply(GameEntity parent) {
-        PlayerControlComponent pcc = LD30.componentPool.obtain(Component.Type.PLAYER_CONTROL);
-        pcc.setParent(parent);
-        LD30.post.addReceiver(pcc);
-        return pcc;
+    public static PlayerInputComponent apply(GameEntity parent) {
+        PlayerInputComponent pic = LD.componentPool.obtain(Component.Type.PLAYER_CONTROL);
+        pic.setParent(parent);
+        LD.post.addReceiver(pic);
+        return pic;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PlayerControlComponent extends Component {
         right.reset();
         space.reset();
         mouse.reset();
-        LD30.post.removeReceiver(this);
+        LD.post.removeReceiver(this);
     }
 
     @Override

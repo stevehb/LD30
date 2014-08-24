@@ -1,10 +1,10 @@
 {
   "fullGravity": -20,
-  "terminalVel": 200,
 
   "playerHorzAccel": 15,
   "playerHorzMaxVel": 20,
   "playerJumpAccel": 300,
+  "playerCollisionMaxVel": 700,
 
   "worldToPixels": 32.0,
   "pixelsToWorld": 0.03125,

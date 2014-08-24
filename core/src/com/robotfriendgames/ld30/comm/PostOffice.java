@@ -2,7 +2,7 @@ package com.robotfriendgames.ld30.comm;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.robotfriendgames.ld30.game.LD30;
+import com.robotfriendgames.ld30.game.LD;
 
 public class PostOffice implements MessageSender {
     private Array<MessageReceiver> register;
@@ -24,12 +24,12 @@ public class PostOffice implements MessageSender {
 
     @Override
     public void send(Message.Type type, Object data) {
-        Message msg = LD30.messagePool.obtain(type, data);
+        Message msg = LD.messagePool.obtain(type, data);
         int regCount = register.size;
         for(int i = 0; i < Math.min(regCount, register.size) && !msg.terminate; i++) {
             MessageReceiver recv = register.get(i);
             recv.receive(msg);
         }
-        LD30.messagePool.free(msg);
+        LD.messagePool.free(msg);
     }
 }

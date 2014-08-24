@@ -15,11 +15,11 @@ public class Settings {
     }
 
     public float fullGravity;
-    public float terminalVel;
 
     public float playerHorzAccel;
     public float playerHorzMaxVel;
     public float playerJumpAccel;
+    public float playerCollisionMaxVel;
 
     public float worldToPixels;
     public float pixelsToWorld;

@@ -10,7 +10,7 @@ public class Component implements MessageReceiver, Pool.Poolable {
         HORZ_WRAP(HorzWrapComponent.class),
         INTRO_CONTROL(IntroControlComponent.class),
         PHYSICS(PhysicsComponent.class),
-        PLAYER_CONTROL(PlayerControlComponent.class),
+        PLAYER_CONTROL(PlayerInputComponent.class),
         PLAYER_STATE(PlayerStateComponent.class);
 
         private Class<? extends Component> componentClass;

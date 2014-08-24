@@ -3,31 +3,31 @@ package com.robotfriendgames.ld30.logic;
 import com.badlogic.gdx.utils.Array;
 import com.robotfriendgames.ld30.components.Component;
 import com.robotfriendgames.ld30.components.IntroControlComponent;
-import com.robotfriendgames.ld30.data.GameState;
+import com.robotfriendgames.ld30.data.GameStates;
 import com.robotfriendgames.ld30.game.GameEntity;
-import com.robotfriendgames.ld30.game.LD30;
+import com.robotfriendgames.ld30.game.LD;
 
 public class IntroLogic {
     private GameEntity introBg;
 
     public void update(float delta) {
-        switch(LD30.data.gameState) {
+        switch(LD.data.gameState) {
         case INTRO_IN:
-            introBg = LD30.entityFactory.makeIntroBackground();
-            LD30.data.gameState = GameState.INTRO;
+            introBg = LD.entityFactory.makeIntroBackground();
+            LD.data.gameState = GameStates.INTRO;
             break;
         case INTRO:
-            Array<IntroControlComponent> array = LD30.componentPool.getActive(Component.Type.INTRO_CONTROL);
+            Array<IntroControlComponent> array = LD.componentPool.getActive(Component.Type.INTRO_CONTROL);
             for(int i = 0; i < array.size; i++) {
                 IntroControlComponent icc = array.get(i);
                 if(icc.hasUp && icc.parent == introBg) {
-                    LD30.data.gameState = GameState.INTRO_OUT;
+                    LD.data.gameState = GameStates.INTRO_OUT;
                 }
             }
             break;
         case INTRO_OUT:
-            LD30.entityPool.free(introBg);
-            LD30.data.gameState = GameState.PLAY_IN;
+            LD.entityPool.free(introBg);
+            LD.data.gameState = GameStates.PLAY_IN;
             break;
         }
     }

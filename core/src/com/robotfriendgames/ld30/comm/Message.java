@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Pool;
 public class Message implements Pool.Poolable {
     public enum Type {
         INPUT,
+        PLAYER_CONTACT,
+        PLAYER_MOVE_LEFT, PLAYER_MOVE_RIGHT, PLAYER_JUMP,
+        PLAYER_STATE,
         UPDATE_PULSE;
     }
     public Message.Type type;

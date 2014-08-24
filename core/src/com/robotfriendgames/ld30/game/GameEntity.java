@@ -60,13 +60,15 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
                 frameIdx = 0;
             }
             TextureRegion region = animData.frames[frameIdx];
-            setSize(region.getRegionWidth(), region.getRegionHeight());
+            float width = region.getRegionWidth() * LD.settings.pixelsToWorld;
+            float height = region.getRegionHeight() * LD.settings.pixelsToWorld;
+            setSize(width, height);
         }
     }
 
     @Override
     public void draw(Batch batch) {
-        if(animData != null && LD30.data.renderLevel == renderLevel) {
+        if(animData != null && LD.data.renderLevel == renderLevel) {
             setRegion(animData.frames[frameIdx]);
             super.draw(batch);
         }
@@ -77,6 +79,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         animData = null;
         animElapsed = 0;
         frameIdx = 0;
+        renderLevel = null;
         setScale(1);
         setColor(Color.WHITE);
         setOrigin(0, 0);
@@ -88,7 +91,9 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
     public void setAnimData(AnimationData animData) {
         this.animData = animData;
         TextureRegion region = this.animData.frames[frameIdx];
-        setSize(region.getRegionWidth(), region.getRegionHeight());
+        float width = region.getRegionWidth() * LD.settings.pixelsToWorld;
+        float height = region.getRegionHeight() * LD.settings.pixelsToWorld;
+        setSize(width, height);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
     }
 
@@ -131,7 +136,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
 
     public void removeComponent(Component component) {
         components.removeValue(component, true);
-        LD30.componentPool.free(component);
+        LD.componentPool.free(component);
     }
 
     public Component getComponent(Component.Type type) {
@@ -151,18 +156,18 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
     public void clearComponents() {
         for(int i = 0; i < components.size; i++) {
             Component c = components.get(i);
-            LD30.componentPool.free(c);
+            LD.componentPool.free(c);
         }
         components.clear();
     }
 
     @Override
     public void send(Message.Type type, Object data) {
-        Message msg = LD30.messagePool.obtain(type, data);
+        Message msg = LD.messagePool.obtain(type, data);
         for(int i = 0; i < components.size; i++) {
             Component c = components.get(i);
             c.receive(msg);
         }
-        LD30.messagePool.free(msg);
+        LD.messagePool.free(msg);
     }
 }
