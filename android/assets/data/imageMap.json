@@ -1,6 +1,7 @@
 {
-  "introBackground": { "image": "data/introBackground.png", "isAnim": false, "fps": -1 },
-  "gameBackground": { "image": "data/gameBackground.png", "isAnim": false, "fps": -1 },
-  "outroBackground": { "image": "data/outroBackground.png", "isAnim": false, "fps": -1 },
-  "player": { "image": "data/player.png", "isAnim": false, "fps": -1 }
+  "introBackground": { "image": "data/introBackground.png", "isAnim": false },
+  "gameBackground": { "image": "data/gameBackground.png", "isAnim": false },
+  "outroBackground": { "image": "data/outroBackground.png", "isAnim": false },
+  "player": { "image": "data/player.png", "isAnim": true },
+  "platform": { "image": "data/platform.png", "isAnim": false }
 }

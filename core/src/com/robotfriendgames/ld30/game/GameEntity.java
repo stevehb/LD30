@@ -50,7 +50,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         }
 
         // update animation
-        if(animData.isAnim) {
+        if(animData != null && animData.isAnim) {
             animElapsed += delta;
             float frameDelay = 1f / animData.fps;
             if(animElapsed > frameDelay) {
@@ -66,7 +66,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
 
     @Override
     public void draw(Batch batch) {
-        if(LD30.data.renderLevel == renderLevel) {
+        if(animData != null && LD30.data.renderLevel == renderLevel) {
             setRegion(animData.frames[frameIdx]);
             super.draw(batch);
         }
@@ -89,6 +89,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         this.animData = animData;
         TextureRegion region = this.animData.frames[frameIdx];
         setSize(region.getRegionWidth(), region.getRegionHeight());
+        setOrigin(getWidth() / 2f, getHeight() / 2f);
     }
 
     public AnimationData getAnimData() {
@@ -131,6 +132,16 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
     public void removeComponent(Component component) {
         components.removeValue(component, true);
         LD30.componentPool.free(component);
+    }
+
+    public Component getComponent(Component.Type type) {
+        for(int i = 0; i < components.size; i++) {
+            Component c = components.get(i);
+            if(c.type == type) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public Component[] getComponents() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class Settings {
     public static Settings load() {
@@ -14,4 +15,14 @@ public class Settings {
     }
 
     public float fullGravity;
+    public float terminalVel;
+
+    public float playerHorzAccel;
+    public float playerHorzMaxVel;
+    public float playerJumpAccel;
+
+    public float worldToPixels;
+    public float pixelsToWorld;
+
+    public ObjectMap<String, PhysicsData> physDataMap;
 }

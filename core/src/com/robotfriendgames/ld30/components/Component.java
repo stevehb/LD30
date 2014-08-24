@@ -7,9 +7,11 @@ import com.robotfriendgames.ld30.game.GameEntity;
 
 public class Component implements MessageReceiver, Pool.Poolable {
     public enum Type {
+        HORZ_WRAP(HorzWrapComponent.class),
         INTRO_CONTROL(IntroControlComponent.class),
+        PHYSICS(PhysicsComponent.class),
         PLAYER_CONTROL(PlayerControlComponent.class),
-        RENDERABLE(RenderableComponent.class);
+        PLAYER_STATE(PlayerStateComponent.class);
 
         private Class<? extends Component> componentClass;
 
@@ -31,6 +33,7 @@ public class Component implements MessageReceiver, Pool.Poolable {
 
     public void setParent(GameEntity parent) {
         this.parent = parent;
+        parent.addComponent(this);
     }
 
     public void update(float delta) { }

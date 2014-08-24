@@ -1,21 +1,21 @@
 package com.robotfriendgames.ld30.game;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.robotfriendgames.ld30.comm.PostOffice;
 import com.robotfriendgames.ld30.data.Data;
 import com.robotfriendgames.ld30.data.Images;
 import com.robotfriendgames.ld30.data.Settings;
 import com.robotfriendgames.ld30.factory.EntityFactory;
-import com.robotfriendgames.ld30.pools.ActionPool;
-import com.robotfriendgames.ld30.pools.ComponentPool;
-import com.robotfriendgames.ld30.pools.EntityPool;
-import com.robotfriendgames.ld30.pools.MessagePool;
+import com.robotfriendgames.ld30.pools.*;
 
 public class LD30 {
     public static Images images;
     public static Settings settings;
     public static Data data;
+
+    public static World world;
 
     public static PostOffice post;
 
@@ -34,7 +34,8 @@ public class LD30 {
         images = Images.load();
         settings = Settings.load();
         data = new Data();
-        data.entities = new Array<GameEntity>(false, 64, GameEntity.class);
+
+        world = new World(new Vector2(0, LD30.settings.fullGravity), true);
 
         post = new PostOffice();
 
