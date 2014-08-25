@@ -2,9 +2,12 @@ package com.robotfriendgames.ld30.components;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.robotfriendgames.ld30.comm.Message;
-import com.robotfriendgames.ld30.data.ObjectType;
 import com.robotfriendgames.ld30.data.PhysicsData;
 import com.robotfriendgames.ld30.game.GameEntity;
 import com.robotfriendgames.ld30.game.LD;
@@ -21,13 +24,13 @@ public class PhysicsComponent extends Component {
         size = new Vector2();
     }
 
-    public static PhysicsComponent apply(GameEntity parent, String physDataName, ObjectType objectType) {
+    public static PhysicsComponent apply(GameEntity parent, String physDataName) {
         PhysicsComponent pc = LD.componentPool.obtain(Type.PHYSICS);
         pc.setParent(parent);
         pc.physDataName = physDataName;
         PhysicsData pd = LD.settings.physDataMap.get(pc.physDataName);
         pc.createBody(pd);
-        pc.body.setUserData(objectType);
+        pc.body.setUserData(parent);
         LD.post.addReceiver(pc);
         return pc;
     }
@@ -52,13 +55,14 @@ public class PhysicsComponent extends Component {
     }
 
     public void copyBodyData() {
+        // copy from box2d to GameEntity
         float x = body.getPosition().x - (parent.getWidth() / 2);
         float y = body.getPosition().y - (parent.getHeight() / 2);
         parent.setPosition(x, y);
         parent.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
     }
 
-    public void copySettingsData() {
+    public void resetData() {
         PhysicsData pd = LD.settings.physDataMap.get(physDataName);
         fixture.setDensity(pd.density);
         fixture.setFriction(pd.friction);

@@ -11,16 +11,20 @@ import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.comm.MessageSender;
 import com.robotfriendgames.ld30.components.Component;
 import com.robotfriendgames.ld30.data.AnimationData;
+import com.robotfriendgames.ld30.data.ObjectType;
 import com.robotfriendgames.ld30.data.RenderLevel;
 
 public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
     public static final String TAG = GameEntity.class.getSimpleName();
 
+    public ObjectType type;
     protected Array<Component> components;
     protected Array<Action> actions;
     protected AnimationData animData;
     protected float animElapsed;
     protected int frameIdx;
+    protected boolean animFinished;
+    protected boolean isVisible;
     protected RenderLevel renderLevel;
 
     public GameEntity() {
@@ -50,7 +54,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         }
 
         // update animation
-        if(animData != null && animData.isAnim) {
+        if(animData != null && animData.isAnim && isVisible) {
             animElapsed += delta;
             float frameDelay = 1f / animData.fps;
 
@@ -59,7 +63,8 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
                 animElapsed -= frameDelay;
             }
             if(frameIdx >= animData.frames.length) {
-                frameIdx = 0;
+                frameIdx = animData.loop ? 0 : frameIdx - 1;
+                animFinished = true;
             }
             TextureRegion region = animData.frames[frameIdx];
             float width = region.getRegionWidth() * LD.settings.pixelsToWorld;
@@ -81,6 +86,8 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         animData = null;
         animElapsed = 0;
         frameIdx = 0;
+        animFinished = false;
+        isVisible = true;
         renderLevel = null;
         setScale(1);
         setColor(Color.WHITE);
@@ -88,6 +95,20 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         setRotation(0);
         clearActions();
         clearComponents();
+    }
+
+    public void makeInvisible() {
+        Color c = getColor();
+        c.a = 0;
+        setColor(c);
+        isVisible = false;
+    }
+
+    public void makeVisible() {
+        Color c = getColor();
+        c.a = 1;
+        setColor(c);
+        isVisible = true;
     }
 
     public void setAnimData(AnimationData animData) {
@@ -101,6 +122,16 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
 
     public AnimationData getAnimData() {
         return animData;
+    }
+
+    public boolean isAnimFinished() {
+        return animFinished;
+    }
+
+    public void resetAnim() {
+        animElapsed = 0;
+        frameIdx = 0;
+        animFinished = false;
     }
 
     public void setRenderLevel(RenderLevel renderLevel) {

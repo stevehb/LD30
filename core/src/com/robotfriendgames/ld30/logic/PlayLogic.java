@@ -1,6 +1,7 @@
 package com.robotfriendgames.ld30.logic;
 
 import com.robotfriendgames.ld30.data.GameStates;
+import com.robotfriendgames.ld30.data.PlayerSprites;
 import com.robotfriendgames.ld30.game.GameEntity;
 import com.robotfriendgames.ld30.game.LD;
 import com.robotfriendgames.ld30.systems.CameraTrackSystem;
@@ -17,14 +18,15 @@ public class PlayLogic {
         switch(LD.data.gameState) {
         case PLAY_IN:
             LD.entityFactory.makeGameBackground();
-            LD.entityFactory.makeGround();
-            LD.data.player = LD.entityFactory.makePlayer();
-
-
-            GameEntity[] platforms = LD.entityFactory.makePlatforms();
+            LD.entityFactory.makeStartGround();
+            LD.entityFactory.makeEndGround();
+            LD.entityFactory.makePlayers();
+            LD.data.player = LD.data.players[PlayerSprites.PHYS];
+            LD.data.platforms = LD.entityFactory.makePlatforms();
 
             cameraTrackSystem = new CameraTrackSystem();
             playerLogic = new PlayerLogic();
+            playerLogic.start();
             physicsSystem = new PhysicsSystem();
             physicsSystem.start();
 
@@ -37,6 +39,7 @@ public class PlayLogic {
             break;
         case PLAY_OUT:
             physicsSystem.stop();
+            playerLogic.stop();
             cameraTrackSystem = null;
             for(int i = 0; i <= LD.entityPool.getActive().size; i++) {
                 GameEntity entity = LD.entityPool.getActive().get(i);

@@ -6,6 +6,7 @@ import com.robotfriendgames.ld30.data.KeyState;
 import com.robotfriendgames.ld30.game.GameEntity;
 import com.robotfriendgames.ld30.game.LD;
 
+// Receives input messages and stores input states
 public class PlayerInputComponent extends Component {
     public KeyState left, right, space, mouse;
 

@@ -35,7 +35,7 @@ public class InputProcessor extends InputAdapter {
             LD.data.world.setGravity(new Vector2(0f, LD.settings.fullGravity));
             Array<PhysicsComponent> array = LD.componentPool.getActive(Component.Type.PHYSICS);
             for(int i = 0; i < array.size; i++) {
-                array.get(i).copySettingsData();
+                array.get(i).resetData();
                 array.get(i).body.setActive(true);
             }
             return true;

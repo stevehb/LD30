@@ -1,43 +1,51 @@
 {
   "fullGravity": -10,
 
-  "playerHorzForce": 4000,
-  "playerHorzMaxVel": 20,
+  "playerHorzVel": 10,
   "playerJumpVel": 13,
-  "playerCollisionMaxVel": 5000,
+
+  "playerLandingMaxVel": 0.2,
+  "playerCollisionMaxVel": 4000,
 
   "platformSpacing": 0.75,
 
   "worldToPixels": 32.0,
   "pixelsToWorld": 0.03125,
 
-  "platforms": [ 
-    "platform_64", "platform_96", 
-    "platform_128", "platform_160", "platform_192", 
-    "platform_224", "platform_256", "platform_290", 
-    "platform_320", "platform_352", "platform_384" ],
+  "platforms": [ "platform_96", "platform_160", "platform_256" ],
 
   "physDataMap": {
-    "floor": {
+    "start": {
+      "bodyType": "StaticBody",
+      "position": { "x": 8.0, "y": 255.0 },
+      "size": { "x": 12.0, "y": 1.0 },
+      "friction": 0,
+      "density": 0,
+      "restitution": 0
+    },
+
+    "end": {
       "bodyType": "StaticBody",
       "position": { "x": 8.0, "y": 1.0 },
       "size": { "x": 12.0, "y": 1.0 },
-      "friction": 0.9,
-      "density": 0
+      "friction": 0,
+      "density": 0,
+      "restitution": 0
     },
 
     "player": {
       "bodyType": "DynamicBody",
       "position": { "x": 6.0, "y": 4.02 },
       "density": 22,
-      "friction": 0.9,
-      "restitution": 0.3
+      "friction": 0,
+      "restitution": 0
     },
 
     "platform": {
       "bodyType": "StaticBody",
       "density": 0,
-      "friction": 0.9
+      "friction": 0,
+      "restitution": 0
     }    
   }
 }

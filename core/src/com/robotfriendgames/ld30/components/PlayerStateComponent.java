@@ -1,6 +1,6 @@
 package com.robotfriendgames.ld30.components;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.PlayerStates;
 import com.robotfriendgames.ld30.game.GameEntity;
@@ -10,7 +10,6 @@ public class PlayerStateComponent extends Component {
     public static final String TAG = PlayerStateComponent.class.getSimpleName();
 
     public PlayerStates playerState;
-    public boolean inContact;
 
     public PlayerStateComponent() {
         super(Type.PLAYER_STATE);
@@ -19,53 +18,49 @@ public class PlayerStateComponent extends Component {
     public static PlayerStateComponent apply(GameEntity parent) {
         PlayerStateComponent psc = LD.componentPool.obtain(Type.PLAYER_STATE);
         psc.setParent(parent);
-        psc.inContact = false;
+        psc.playerState = PlayerStates.STILL;
         LD.post.addReceiver(psc);
-        LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.STILL);
         return psc;
-    }
-
-    public void update(float delta) {
-        Vector2 vel = LD.data.getPlayerVel();
-        float vel2 = vel.len2();
-        if(vel2 < 0.2) {
-            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.STILL);
-        }
-    }
-
-    @Override
-    public void receive(Message msg) {
-        switch(msg.type) {
-        case PLAYER_CONTACT:
-            updateContact(msg.data);
-            break;
-        case PLAYER_STATE:
-            updateState((PlayerStates) msg.data);
-            break;
-        }
     }
 
     @Override
     public void reset() {
         super.reset();
         LD.post.removeReceiver(this);
-        inContact = false;
         playerState = PlayerStates.STILL;
     }
 
-    private void updateContact(Object obj) {
-        if(obj == null) {
-            inContact = false;
-        } else {
-            inContact = true;
+    @Override
+    public void receive(Message msg) {
+        switch(msg.type) {
+        case PLAYER_STATE:
+            updateState((PlayerStates) msg.data);
+            updateSprite();
+            break;
         }
     }
 
-    private void updateState(PlayerStates playerState) {
-        this.playerState = playerState;
+    private void updateState(PlayerStates state) {
+        if(playerState == PlayerStates.DEAD && state != PlayerStates.STILL) {
+            return;
+        }
+        playerState = state;
+    }
 
-        if(LD.data.player != null) {
-            LD.data.player.getAnimData().isAnim = this.playerState != PlayerStates.STILL;
+    private void updateSprite() {
+        // switch actively displayed sprite according to player state
+        for(int i = 0; i < PlayerStates.states.length; i++) {
+            PlayerStates state = PlayerStates.states[i];
+            if(playerState == state) {
+                if(playerState == PlayerStates.STILL) {
+                    Gdx.app.log(TAG, "making STILL visible");
+                }
+                LD.data.players[playerState.getIdx()].makeVisible();
+            } else {
+                if(playerState.getIdx() != state.getIdx()) {
+                    LD.data.players[state.getIdx()].makeInvisible();
+                }
+            }
         }
     }
 }

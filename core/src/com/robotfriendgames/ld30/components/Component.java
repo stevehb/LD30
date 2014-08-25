@@ -7,6 +7,7 @@ import com.robotfriendgames.ld30.game.GameEntity;
 
 public class Component implements MessageReceiver, Pool.Poolable {
     public enum Type {
+        DEATH_WATCH(DeathWatchComponent.class),
         HORZ_WRAP(HorzWrapComponent.class),
         INTRO_CONTROL(IntroControlComponent.class),
         PHYSICS(PhysicsComponent.class),
