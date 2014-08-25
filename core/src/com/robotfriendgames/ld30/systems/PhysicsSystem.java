@@ -6,9 +6,11 @@ import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.comm.MessageReceiver;
 import com.robotfriendgames.ld30.data.PlayerStates;
 import com.robotfriendgames.ld30.game.LD;
+import com.robotfriendgames.ld30.game.PhysUtils;
 
 public class PhysicsSystem implements MessageReceiver {
     public static final String TAG = PhysicsSystem.class.getSimpleName();
+    private static final Vector2 tmp = new Vector2(0, 0);
 
     private PlayerContactListener contactListener;
     private PlayerContactFilter contactFilter;
@@ -25,7 +27,8 @@ public class PhysicsSystem implements MessageReceiver {
     }
 
     public void update(float delta) {
-
+        float grav = PhysUtils.calcGravity(LD.data.player.getY());
+        LD.data.world.setGravity(tmp.set(0, grav));
     }
 
     public void stop() {
@@ -54,7 +57,8 @@ public class PhysicsSystem implements MessageReceiver {
         Vector2 vel = LD.data.getPlayerVel();
         Vector2 pos = LD.data.getPlayerPos();
         if(Math.abs(vel.x) < LD.settings.playerHorzMaxVel) {
-            body.applyLinearImpulse(dirMul * LD.settings.playerHorzAccel, 0, pos.x, pos.y, true);
+            body.applyForce(dirMul * LD.settings.playerHorzForce, 0, pos.x, pos.y, true);
+            //body.applyLinearImpulse(dirMul * LD.settings.playerHorzForce, 0, pos.x, pos.y, true);
         }
 
         if(vel.x < 0) {
@@ -65,8 +69,10 @@ public class PhysicsSystem implements MessageReceiver {
     }
 
     private void jumpPlayer() {
-        Vector2 pos = LD.data.getPlayerPos();
         Body body = LD.data.getPlayerBody();
-        body.applyLinearImpulse(0, LD.settings.playerJumpAccel, pos.x, pos.y, true);
+        Vector2 vel = LD.data.getPlayerVel();
+        Vector2 pos = LD.data.getPlayerPos();
+        body.setLinearVelocity(vel.x, PhysUtils.calcJumpVel(pos.y));
+        LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMPING);
     }
 }

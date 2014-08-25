@@ -5,7 +5,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -28,7 +27,7 @@ public class LD30Game extends ApplicationAdapter {
     private SpriteBatch batch;
 
     private Box2DDebugRenderer debugRenderer;
-    private Texture platform;
+    //private Sprite platform;
 
     @Override
     public void create () {
@@ -48,6 +47,11 @@ public class LD30Game extends ApplicationAdapter {
         debugRenderer = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputProcessor());
         LD.data.gameState = GameStates.INTRO_IN;
+
+        //Texture platformTexture = new Texture("data/platform.png");
+        //platform = new Sprite(platformTexture);
+        //platform.setSize(platform.getWidth() * LD.settings.pixelsToWorld, platform.getHeight() * LD.settings.pixelsToWorld);
+        //platform.flip(true, false);
     }
 
     @Override
@@ -79,7 +83,14 @@ public class LD30Game extends ApplicationAdapter {
                 entity.draw(batch);
             }
         }
+
+        //if(LD.data.player != null) {
+        //    platform.setPosition(LD.data.player.getX(), LD.data.player.getY());
+        //}
+        //platform.draw(batch);
+
         batch.end();
+
 
         debugRenderer.render(LD.data.world, LD.data.camera.combined);
 

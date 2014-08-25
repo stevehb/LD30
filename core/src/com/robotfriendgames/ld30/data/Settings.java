@@ -16,13 +16,17 @@ public class Settings {
 
     public float fullGravity;
 
-    public float playerHorzAccel;
+    public float playerHorzForce;
     public float playerHorzMaxVel;
-    public float playerJumpAccel;
+    public float playerJumpVel;
     public float playerCollisionMaxVel;
+
+    public float platformSpacing;
 
     public float worldToPixels;
     public float pixelsToWorld;
+
+    public String[] platforms;
 
     public ObjectMap<String, PhysicsData> physDataMap;
 }

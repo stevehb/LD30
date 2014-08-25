@@ -2,6 +2,16 @@
   "introBackground": { "image": "data/introBackground.png", "isAnim": false },
   "gameBackground": { "image": "data/gameBackground.png", "isAnim": false },
   "outroBackground": { "image": "data/outroBackground.png", "isAnim": false },
-  "player": { "image": "data/player.png", "isAnim": true },
-  "platform": { "image": "data/platform.png", "isAnim": false }
+  "player": { "image": "data/player.png", "isAnim": true, "fps": 4 },
+  "platform_64": { "image": "data/platform_64.png", "isAnim": false },
+  "platform_96": { "image": "data/platform_96.png", "isAnim": false },
+  "platform_128": { "image": "data/platform_128.png", "isAnim": false },
+  "platform_160": { "image": "data/platform_160.png", "isAnim": false },
+  "platform_192": { "image": "data/platform_192.png", "isAnim": false },
+  "platform_224": { "image": "data/platform_224.png", "isAnim": false },
+  "platform_256": { "image": "data/platform_256.png", "isAnim": false },
+  "platform_290": { "image": "data/platform_290.png", "isAnim": false },
+  "platform_320": { "image": "data/platform_320.png", "isAnim": false },
+  "platform_352": { "image": "data/platform_352.png", "isAnim": false },
+  "platform_384": { "image": "data/platform_384.png", "isAnim": false }
 }

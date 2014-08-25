@@ -19,6 +19,7 @@ public class Data {
 
     public float worldWidth, worldHeight;
     public float worldMaxHeight;
+    public float worldMidHeight;
 
     public World world = new World(new Vector2(0, LD.settings.fullGravity), true);
     public GameEntity player;

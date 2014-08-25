@@ -3,6 +3,7 @@ package com.robotfriendgames.ld30.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.components.Component;
@@ -31,6 +32,7 @@ public class InputProcessor extends InputAdapter {
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.R) {
             LD.settings = Settings.load();
+            LD.data.world.setGravity(new Vector2(0f, LD.settings.fullGravity));
             Array<PhysicsComponent> array = LD.componentPool.getActive(Component.Type.PHYSICS);
             for(int i = 0; i < array.size; i++) {
                 array.get(i).copySettingsData();

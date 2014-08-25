@@ -1,11 +1,14 @@
 package com.robotfriendgames.ld30.components;
 
+import com.badlogic.gdx.math.Vector2;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.PlayerStates;
 import com.robotfriendgames.ld30.game.GameEntity;
 import com.robotfriendgames.ld30.game.LD;
 
 public class PlayerStateComponent extends Component {
+    public static final String TAG = PlayerStateComponent.class.getSimpleName();
+
     public PlayerStates playerState;
     public boolean inContact;
 
@@ -20,6 +23,14 @@ public class PlayerStateComponent extends Component {
         LD.post.addReceiver(psc);
         LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.STILL);
         return psc;
+    }
+
+    public void update(float delta) {
+        Vector2 vel = LD.data.getPlayerVel();
+        float vel2 = vel.len2();
+        if(vel2 < 0.2) {
+            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.STILL);
+        }
     }
 
     @Override
@@ -52,5 +63,9 @@ public class PlayerStateComponent extends Component {
 
     private void updateState(PlayerStates playerState) {
         this.playerState = playerState;
+
+        if(LD.data.player != null) {
+            LD.data.player.getAnimData().isAnim = this.playerState != PlayerStates.STILL;
+        }
     }
 }

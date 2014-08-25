@@ -1,8 +1,10 @@
 package com.robotfriendgames.ld30.components;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.robotfriendgames.ld30.comm.Message;
+import com.robotfriendgames.ld30.data.ObjectType;
 import com.robotfriendgames.ld30.data.PhysicsData;
 import com.robotfriendgames.ld30.game.GameEntity;
 import com.robotfriendgames.ld30.game.LD;
@@ -12,17 +14,20 @@ public class PhysicsComponent extends Component {
     public String physDataName;
     public Body body;
     public Fixture fixture;
+    public Vector2 size;
 
     public PhysicsComponent() {
         super(Type.PHYSICS);
+        size = new Vector2();
     }
 
-    public static PhysicsComponent apply(GameEntity parent, String physDataName) {
+    public static PhysicsComponent apply(GameEntity parent, String physDataName, ObjectType objectType) {
         PhysicsComponent pc = LD.componentPool.obtain(Type.PHYSICS);
         pc.setParent(parent);
         pc.physDataName = physDataName;
         PhysicsData pd = LD.settings.physDataMap.get(pc.physDataName);
         pc.createBody(pd);
+        pc.body.setUserData(objectType);
         LD.post.addReceiver(pc);
         return pc;
     }
@@ -38,6 +43,7 @@ public class PhysicsComponent extends Component {
         physDataName = null;
         body = null;
         fixture = null;
+        size.set(Vector2.Zero);
         LD.post.removeReceiver(this);
     }
 
@@ -73,8 +79,10 @@ public class PhysicsComponent extends Component {
         PolygonShape shape = new PolygonShape();
         if(physData.size != null) {
             shape.setAsBox(physData.size.x, physData.size.y);
+            size.set(physData.size.x * 2, physData.size.y * 2);
         } else {
             shape.setAsBox(parent.getWidth() / 2, parent.getHeight() / 2);
+            size.set(parent.getWidth(), parent.getHeight());
         }
 
         FixtureDef fixtureDef = new FixtureDef();

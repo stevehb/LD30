@@ -20,6 +20,9 @@ public class PlayLogic {
             LD.entityFactory.makeGround();
             LD.data.player = LD.entityFactory.makePlayer();
 
+
+            GameEntity[] platforms = LD.entityFactory.makePlatforms();
+
             cameraTrackSystem = new CameraTrackSystem();
             playerLogic = new PlayerLogic();
             physicsSystem = new PhysicsSystem();

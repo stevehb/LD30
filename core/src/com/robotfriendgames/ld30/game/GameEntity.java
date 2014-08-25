@@ -53,10 +53,12 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         if(animData != null && animData.isAnim) {
             animElapsed += delta;
             float frameDelay = 1f / animData.fps;
+
             if(animElapsed > frameDelay) {
                 frameIdx++;
+                animElapsed -= frameDelay;
             }
-            if(frameIdx > animData.frames.length) {
+            if(frameIdx >= animData.frames.length) {
                 frameIdx = 0;
             }
             TextureRegion region = animData.frames[frameIdx];
