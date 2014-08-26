@@ -9,7 +9,7 @@ import com.robotfriendgames.ld30.components.Component;
 import com.robotfriendgames.ld30.components.PhysicsComponent;
 import com.robotfriendgames.ld30.components.PlayerStateComponent;
 import com.robotfriendgames.ld30.game.GameEntity;
-import com.robotfriendgames.ld30.game.LD;
+import com.robotfriendgames.ld30.systems.SoundSystem;
 
 public class Data {
     public GameStates gameState;
@@ -17,12 +17,13 @@ public class Data {
 
     public OrthographicCamera camera;
     public Viewport viewport;
+    public SoundSystem soundSystem;
 
     public float worldWidth, worldHeight;
     public float worldMaxHeight;
     public float worldMidHeight;
 
-    public World world = new World(new Vector2(0, LD.settings.fullGravity), true);
+    public World world;
     public GameEntity[] players;
     public GameEntity player;
     public GameEntity[] platforms;

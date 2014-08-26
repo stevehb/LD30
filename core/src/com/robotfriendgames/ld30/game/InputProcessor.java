@@ -32,7 +32,9 @@ public class InputProcessor extends InputAdapter {
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.R) {
             LD.settings = Settings.load();
-            LD.data.world.setGravity(new Vector2(0f, LD.settings.fullGravity));
+            if(LD.data.world != null) {
+                LD.data.world.setGravity(new Vector2(0f, LD.settings.fullGravity));
+            }
             Array<PhysicsComponent> array = LD.componentPool.getActive(Component.Type.PHYSICS);
             for(int i = 0; i < array.size; i++) {
                 array.get(i).resetData();

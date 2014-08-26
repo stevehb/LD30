@@ -1,6 +1,7 @@
 package com.robotfriendgames.ld30.logic;
 
 import com.badlogic.gdx.utils.Array;
+import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.components.Component;
 import com.robotfriendgames.ld30.components.IntroControlComponent;
 import com.robotfriendgames.ld30.data.GameStates;
@@ -14,6 +15,7 @@ public class IntroLogic {
         switch(LD.data.gameState) {
         case INTRO_IN:
             introBg = LD.entityFactory.makeIntroBackground();
+            LD.post.send(Message.Type.PLAY_SOUND, "introOutro");
             LD.data.gameState = GameStates.INTRO;
             break;
         case INTRO:

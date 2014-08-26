@@ -1,6 +1,5 @@
 package com.robotfriendgames.ld30.systems;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -15,6 +14,8 @@ import com.robotfriendgames.ld30.game.LD;
 
 public class PlayerContactListener implements ContactListener {
     public  static final String TAG = PlayerContactListener.class.getSimpleName();
+
+    private boolean startedWinWaitTimer;
 
     @Override
     public void beginContact(Contact contact) { }
@@ -65,7 +66,7 @@ public class PlayerContactListener implements ContactListener {
             return;
         }
 
-        GameEntity platform = getPlatform(contact.getFixtureA(), contact.getFixtureB());
+        GameEntity collider = getCollider(contact.getFixtureA(), contact.getFixtureB());
 
         // test for player
         boolean isPlayer =
@@ -91,7 +92,10 @@ public class PlayerContactListener implements ContactListener {
                 maxImpulse > (LD.settings.playerCollisionMaxVel * 1.25f) &&
                 (playerRotation < 45 && playerRotation > 315);
         if(tooHardAngle || tooHardStraight) {
-            Gdx.app.log(TAG, "player dead: angle=" + playerRotation + ", impulse=" + maxImpulse);
+            if(startedWinWaitTimer) {
+                LD.post.send(Message.Type.WIN_WAIT_STOP, null);
+            }
+            LD.post.send(Message.Type.PLAY_SOUND, "explosion");
             LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.DEAD);
             return;
         }
@@ -104,31 +108,43 @@ public class PlayerContactListener implements ContactListener {
             } else {
                 LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_RIGHT);
             }
-            setSafePlatform(platform);
+            if(collider.type == ObjectType.END && !startedWinWaitTimer) {
+                LD.post.send(Message.Type.WIN_WAIT_START, null);
+                startedWinWaitTimer = true;
+            }
+            setSafePlatform(collider);
         } else {
             if(vel.x < 0) {
                 LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_LEFT);
             } else {
                 LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_RIGHT);
             }
+            if(startedWinWaitTimer) {
+                LD.post.send(Message.Type.WIN_WAIT_STOP, null);
+                startedWinWaitTimer = false;
+            }
         }
     }
 
-    private GameEntity getPlatform(Fixture a, Fixture b) {
-        GameEntity platform = null;
+    private GameEntity getCollider(Fixture a, Fixture b) {
+        GameEntity entity = null;
         ObjectType aType = ((GameEntity) a.getBody().getUserData()).type;
         ObjectType bType = ((GameEntity) b.getBody().getUserData()).type;
-        if(aType == ObjectType.PLATFORM) {
-            platform = (GameEntity)a.getBody().getUserData();
-        } else if(bType == ObjectType.PLATFORM) {
-            platform = (GameEntity)b.getBody().getUserData();
+        if(aType != ObjectType.PLAYER) {
+            entity = (GameEntity)a.getBody().getUserData();
+        } else if(bType != ObjectType.PLAYER) {
+            entity = (GameEntity)b.getBody().getUserData();
         }
-        return platform;
+        return entity;
     }
 
-    private void setSafePlatform(GameEntity platform) {
+    private void setSafePlatform(GameEntity collider) {
+        if(collider.type != ObjectType.PLATFORM) {
+            LD.data.safePlatformIdx = -1;
+            return;
+        }
         for(int i = 0; i < LD.data.platforms.length; i++) {
-            if(LD.data.platforms[i] == platform) {
+            if(LD.data.platforms[i] == collider) {
                 LD.data.safePlatformIdx = i;
                 return;
             }

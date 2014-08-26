@@ -5,9 +5,10 @@ import com.badlogic.gdx.utils.Pool;
 public class Message implements Pool.Poolable {
     public enum Type {
         INPUT,
+        PLAY_SOUND,
         PLAYER_INPUT_LEFT, PLAYER_INPUT_RIGHT, PLAYER_INPUT_JUMP,
         PLAYER_RESET, PLAYER_STATE,
-        UPDATE_PULSE;
+        WIN_WAIT_START, WIN_WAIT_STOP, WIN_WAIT_END;
     }
     public Message.Type type;
     public Object data;

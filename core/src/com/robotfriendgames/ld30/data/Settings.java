@@ -26,6 +26,8 @@ public class Settings {
     public float worldToPixels;
     public float pixelsToWorld;
 
+    public float winWaitDelay;
+
     public String[] platforms;
 
     public ObjectMap<String, PhysicsData> physDataMap;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.comm.MessageReceiver;
+import com.robotfriendgames.ld30.data.Half;
 import com.robotfriendgames.ld30.data.PlayerStates;
 import com.robotfriendgames.ld30.game.LD;
 import com.robotfriendgames.ld30.game.PhysUtils;
@@ -14,16 +15,16 @@ public class PhysicsSystem implements MessageReceiver {
     private static final Vector2 tmp = new Vector2(0, 0);
 
     private PlayerContactListener contactListener;
-    //private PlayerContactFilter contactFilter;
+    private Half currentHalf, prevHalf;
 
     public PhysicsSystem() {
         contactListener = new PlayerContactListener();
-        //contactFilter = new PlayerContactFilter();
     }
 
     public void start() {
         LD.data.world.setContactListener(contactListener);
-        //LD.data.world.setContactFilter(contactFilter);
+        currentHalf = Half.BOTTOM;
+        prevHalf = currentHalf;
         LD.post.addReceiver(this);
     }
 
@@ -36,16 +37,22 @@ public class PhysicsSystem implements MessageReceiver {
         if(pos.y > LD.data.worldMidHeight && playerRotation < 90) {
             Body body = LD.data.getPlayerBody();
             body.setTransform(pos, 180 * MathUtils.degreesToRadians);
+            currentHalf = Half.TOP;
         }
         if(pos.y < LD.data.worldMidHeight && playerRotation > 90) {
             Body body = LD.data.getPlayerBody();
             body.setTransform(pos, 0);
+            currentHalf = Half.BOTTOM;
         }
+
+        if(prevHalf != currentHalf) {
+            LD.post.send(Message.Type.PLAY_SOUND, "gravityFlip");
+        }
+        prevHalf = currentHalf;
     }
 
     public void stop() {
         LD.data.world.setContactListener(null);
-        //LD.data.world.setContactFilter(null);
         LD.post.removeReceiver(this);
     }
 
@@ -82,20 +89,24 @@ public class PhysicsSystem implements MessageReceiver {
             return;
         }
 
+        Body body = LD.data.getPlayerBody();
+        Vector2 vel = LD.data.getPlayerVel();
+        Vector2 pos = LD.data.getPlayerPos();
+
         // apply the physics of moving the player, and update state
         float forceMul = 1f;
         boolean playerJumping =
                 playerState == PlayerStates.JUMP_RIGHT ||
                 playerState == PlayerStates.JUMP_LEFT;
-        if(playerJumping) {
+        //boolean sameDir = (vel.x < 0 && dirMul < 0) || (vel.x > 0 && dirMul > 0);
+        if(playerJumping /*&& !sameDir*/) {
             forceMul = 0.15f;
         }
 
-        Body body = LD.data.getPlayerBody();
-        Vector2 vel = LD.data.getPlayerVel();
         float newVelX = dirMul * forceMul * LD.settings.playerHorzVel;
         body.setLinearVelocity(newVelX, vel.y);
-        setState(playerJumping, newVelX);
+        vel.x = newVelX;
+        setState(playerJumping, pos, vel);
     }
 
     private void jumpPlayer() {
@@ -115,18 +126,31 @@ public class PhysicsSystem implements MessageReceiver {
         Vector2 vel = LD.data.getPlayerVel();
         Vector2 pos = LD.data.getPlayerPos();
         body.setLinearVelocity(vel.x, PhysUtils.calcJumpVel(pos.y));
-        setState(true, vel.x);
+        setState(true, pos, vel);
+        LD.post.send(Message.Type.PLAY_SOUND, "jump");
     }
 
-    private void setState(boolean playerJumping, float velX) {
-        if(!playerJumping && velX < 0) {
-            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_LEFT);
-        } else if(!playerJumping) {
-            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_RIGHT);
-        } else if(velX < 0) {
-            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_LEFT);
+    private void setState(boolean playerJumping, Vector2 pos, Vector2 vel) {
+        if(pos.y < LD.data.worldMidHeight) {
+            if(!playerJumping && vel.x < 0) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_LEFT);
+            } else if(!playerJumping) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_RIGHT);
+            } else if(vel.x < 0) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_LEFT);
+            } else {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_RIGHT);
+            }
         } else {
-            LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_RIGHT);
+            if(!playerJumping && vel.x < 0) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_RIGHT);
+            } else if(!playerJumping) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.GROUND_LEFT);
+            } else if(vel.x < 0) {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_RIGHT);
+            } else {
+                LD.post.send(Message.Type.PLAYER_STATE, PlayerStates.JUMP_LEFT);
+            }
         }
     }
 }

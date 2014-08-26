@@ -6,7 +6,7 @@
   "playerLeft": { "image": "data/playerLeft.png", "isAnim": true, "loop": true, "fps": 4 },
   "playerJumpRight": { "image": "data/playerJumpRight.png", "isAnim": false },
   "playerJumpLeft": { "image": "data/playerJumpLeft.png", "isAnim": false },
-  "explosion": { "image": "data/explosion.png", "isAnim": true, "loop": false, "fps": 8 },
+  "explosion": { "image": "data/explosion.png", "isAnim": true, "loop": false, "fps": 12 },
   "platform_64": { "image": "data/platform_64.png", "isAnim": false },
   "platform_96": { "image": "data/platform_96.png", "isAnim": false },
   "platform_128": { "image": "data/platform_128.png", "isAnim": false },

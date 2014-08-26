@@ -27,6 +27,15 @@ public class EntityFactory {
         return entity;
     }
 
+    public GameEntity makeOutroBackground() {
+        GameEntity entity = LD.entityPool.obtain();
+        entity.setAnimData(LD.images.map.get("outroBackground"));
+        entity.setRenderLevel(RenderLevel.BACKGROUND);
+        entity.type = ObjectType.BACKGROUND;
+        IntroControlComponent.apply(entity);
+        return entity;
+    }
+
     public GameEntity makeGameBackground() {
         GameEntity entity = LD.entityPool.obtain();
         entity.setAnimData(LD.images.map.get("gameBackground"));
@@ -115,7 +124,9 @@ public class EntityFactory {
             if(platforms.size > LD.data.worldMaxHeight) {
                 throw new RuntimeException("too many platforms: " + platforms.size);
             }
-            workingHeight += (PhysUtils.calcJumpHeight(workingHeight) * LD.settings.platformSpacing);
+            float heightAdd = (PhysUtils.calcJumpHeight(workingHeight) * LD.settings.platformSpacing);
+            heightAdd = Math.min(heightAdd, LD.data.worldHeight);
+            workingHeight += heightAdd;
         }
         platforms.shrink();
         return platforms.items;

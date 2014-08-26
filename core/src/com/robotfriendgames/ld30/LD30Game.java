@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.robotfriendgames.ld30.data.GameStates;
 import com.robotfriendgames.ld30.data.RenderLevel;
@@ -16,6 +15,7 @@ import com.robotfriendgames.ld30.game.LD;
 import com.robotfriendgames.ld30.logic.IntroLogic;
 import com.robotfriendgames.ld30.logic.OutroLogic;
 import com.robotfriendgames.ld30.logic.PlayLogic;
+import com.robotfriendgames.ld30.systems.SoundSystem;
 
 public class LD30Game extends ApplicationAdapter {
     public static final String TAG = LD30Game.class.getSimpleName();
@@ -26,8 +26,7 @@ public class LD30Game extends ApplicationAdapter {
 
     private SpriteBatch batch;
 
-    private Box2DDebugRenderer debugRenderer;
-    //private Sprite platform;
+    //private Box2DDebugRenderer debugRenderer;
 
     @Override
     public void create () {
@@ -44,14 +43,12 @@ public class LD30Game extends ApplicationAdapter {
         LD.data.camera = new OrthographicCamera(LD.data.worldWidth, LD.data.worldHeight);
         LD.data.viewport = new FitViewport(LD.data.worldWidth, LD.data.worldHeight, LD.data.camera);
 
-        debugRenderer = new Box2DDebugRenderer();
+        LD.data.soundSystem = new SoundSystem();
+        LD.data.soundSystem.start();
+
+        //debugRenderer = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new InputProcessor());
         LD.data.gameState = GameStates.INTRO_IN;
-
-        //Texture platformTexture = new Texture("data/platform.png");
-        //platform = new Sprite(platformTexture);
-        //platform.setSize(platform.getWidth() * LD.settings.pixelsToWorld, platform.getHeight() * LD.settings.pixelsToWorld);
-        //platform.flip(true, false);
     }
 
     @Override
@@ -84,29 +81,22 @@ public class LD30Game extends ApplicationAdapter {
             }
         }
 
-        //if(LD.data.player != null) {
-        //    platform.setPosition(LD.data.player.getX(), LD.data.player.getY());
-        //}
-        //platform.draw(batch);
-
         batch.end();
-
-
-        debugRenderer.render(LD.data.world, LD.data.camera.combined);
-
-        LD.data.world.step(delta, 6, 2);
+        if(LD.data.world != null) {
+            //debugRenderer.render(LD.data.world, LD.data.camera.combined);
+            LD.data.world.step(delta, 6, 2);
+        }
     }
 
     @Override
-    public void pause () {
-    }
+    public void pause () { Gdx.app.log(TAG, "pause"); }
 
     @Override
-    public void resume () {
-    }
+    public void resume () { Gdx.app.log(TAG, "resume"); }
 
     @Override
     public void dispose () {
+        LD.data.soundSystem.stop();
         LD.assetManager.dispose();
     }
 }

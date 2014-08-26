@@ -5,6 +5,7 @@ import com.robotfriendgames.ld30.comm.PostOffice;
 import com.robotfriendgames.ld30.data.Data;
 import com.robotfriendgames.ld30.data.Images;
 import com.robotfriendgames.ld30.data.Settings;
+import com.robotfriendgames.ld30.data.Sounds;
 import com.robotfriendgames.ld30.factory.EntityFactory;
 import com.robotfriendgames.ld30.pools.ActionPool;
 import com.robotfriendgames.ld30.pools.ComponentPool;
@@ -13,6 +14,7 @@ import com.robotfriendgames.ld30.pools.MessagePool;
 
 public class LD {
     public static Images images;
+    public static Sounds sounds;
     public static Settings settings;
     public static Data data;
 
@@ -31,6 +33,7 @@ public class LD {
         assetManager = new AssetManager();
 
         images = Images.load();
+        sounds = Sounds.load();
         settings = Settings.load();
         data = new Data();
 
@@ -45,5 +48,6 @@ public class LD {
 
         assetManager.finishLoading();
         Images.initAnimations();
+        Sounds.initSounds();
     }
 }

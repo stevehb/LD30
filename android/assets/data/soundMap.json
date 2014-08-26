@@ -1,0 +1,7 @@
+{
+  "explosion": { "file": "data/explosion.ogg", "volume": 1.0 },
+  "gravityFlip": { "file": "data/gravityFlip.ogg", "volume": 1.0 },
+  "introOutro": { "file": "data/introOutro.ogg", "volume": 1.0 },
+  "jump": { "file": "data/jump.ogg", "volume": 1.0 },
+  "playButton": { "file": "data/playButton.ogg", "volume": 1.0 }
+}

@@ -1,6 +1,5 @@
 package com.robotfriendgames.ld30.components;
 
-import com.badlogic.gdx.Gdx;
 import com.robotfriendgames.ld30.comm.Message;
 import com.robotfriendgames.ld30.data.PlayerStates;
 import com.robotfriendgames.ld30.game.GameEntity;
@@ -52,14 +51,9 @@ public class PlayerStateComponent extends Component {
         for(int i = 0; i < PlayerStates.states.length; i++) {
             PlayerStates state = PlayerStates.states[i];
             if(playerState == state) {
-                if(playerState == PlayerStates.STILL) {
-                    Gdx.app.log(TAG, "making STILL visible");
-                }
                 LD.data.players[playerState.getIdx()].makeVisible();
-            } else {
-                if(playerState.getIdx() != state.getIdx()) {
-                    LD.data.players[state.getIdx()].makeInvisible();
-                }
+            } else if(playerState.getIdx() != state.getIdx()) {
+                LD.data.players[state.getIdx()].makeInvisible();
             }
         }
     }

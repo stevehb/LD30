@@ -24,6 +24,10 @@ public class BasePool<T> extends ReflectionPool<T> {
         super.free(obj);
     }
 
+    public void freeAll() {
+        super.freeAll(active);
+    }
+
     public Array<T> getActive() {
         return active;
     }

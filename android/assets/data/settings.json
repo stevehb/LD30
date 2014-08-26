@@ -1,23 +1,25 @@
 {
-  "fullGravity": -10,
+  "fullGravity": -25,
 
   "playerHorzVel": 10,
   "playerJumpVel": 13,
 
   "playerLandingMaxVel": 0.2,
-  "playerCollisionMaxVel": 4000,
+  "playerCollisionMaxVel": 7400,
 
-  "platformSpacing": 0.75,
+  "platformSpacing": 0.9,
 
   "worldToPixels": 32.0,
   "pixelsToWorld": 0.03125,
 
-  "platforms": [ "platform_96", "platform_160", "platform_256" ],
+  "winWaitDelay": 1.0,
+
+  "platforms": [ "platform_96", "platform_64", "platform_160", "platform_256" ],
 
   "physDataMap": {
     "start": {
       "bodyType": "StaticBody",
-      "position": { "x": 8.0, "y": 255.0 },
+      "position": { "x": 8.0, "y": 1.0 },
       "size": { "x": 12.0, "y": 1.0 },
       "friction": 0,
       "density": 0,
@@ -26,7 +28,7 @@
 
     "end": {
       "bodyType": "StaticBody",
-      "position": { "x": 8.0, "y": 1.0 },
+      "position": { "x": 8.0, "y": 255.0 },
       "size": { "x": 12.0, "y": 1.0 },
       "friction": 0,
       "density": 0,

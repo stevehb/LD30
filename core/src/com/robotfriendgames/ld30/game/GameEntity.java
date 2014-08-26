@@ -60,7 +60,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
 
             if(animElapsed > frameDelay) {
                 frameIdx++;
-                animElapsed -= frameDelay;
+                animElapsed = 0;
             }
             if(frameIdx >= animData.frames.length) {
                 frameIdx = animData.loop ? 0 : frameIdx - 1;
@@ -89,6 +89,7 @@ public class GameEntity extends Sprite implements MessageSender, Pool.Poolable {
         animFinished = false;
         isVisible = true;
         renderLevel = null;
+        setPosition(0, 0);
         setScale(1);
         setColor(Color.WHITE);
         setOrigin(0, 0);

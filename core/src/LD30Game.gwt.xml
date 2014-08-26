@@ -4,6 +4,11 @@
     <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.comm" />
     <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.components" />
     <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.data" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.factory" />
     <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.game" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.logic" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.pools" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.robotfriendgames.ld30.systems" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.audio.Sound" />
 	<source path="com/robotfriendgames/ld30" />
 </module>
