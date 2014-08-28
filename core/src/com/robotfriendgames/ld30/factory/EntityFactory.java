@@ -36,14 +36,21 @@ public class EntityFactory {
         return entity;
     }
 
-    public GameEntity makeGameBackground() {
-        GameEntity entity = LD.entityPool.obtain();
-        entity.setAnimData(LD.images.map.get("gameBackground"));
-        entity.setRenderLevel(RenderLevel.BACKGROUND);
-        entity.type = ObjectType.BACKGROUND;
-        LD.data.worldMaxHeight = entity.getHeight();
+    public GameEntity[] makeGameBackground() {
+        GameEntity[] bgTiles = new GameEntity[LD.settings.backgroundTiles.length];
+        float accumHeight = 0;
+        for(int i = 0; i < bgTiles.length; i++) {
+            String img = LD.settings.backgroundTiles[i];
+            bgTiles[i] = LD.entityPool.obtain();
+            bgTiles[i].setAnimData(LD.images.map.get(img));
+            bgTiles[i].setRenderLevel(RenderLevel.BACKGROUND);
+            bgTiles[i].type = ObjectType.BACKGROUND;
+            bgTiles[i].setPosition(bgTiles[i].getX(), bgTiles[i].getHeight() * i);
+            accumHeight += bgTiles[i].getHeight();
+        }
+        LD.data.worldMaxHeight = accumHeight;
         LD.data.worldMidHeight = LD.data.worldMaxHeight / 2;
-        return entity;
+        return bgTiles;
     }
 
     public GameEntity makeStartGround() {

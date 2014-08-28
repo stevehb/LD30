@@ -30,5 +30,7 @@ public class Settings {
 
     public String[] platforms;
 
+    public String[] backgroundTiles;
+
     public ObjectMap<String, PhysicsData> physDataMap;
 }

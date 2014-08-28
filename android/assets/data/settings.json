@@ -16,6 +16,12 @@
 
   "platforms": [ "platform_96", "platform_64", "platform_160", "platform_256" ],
 
+  "backgroundTiles": [ 
+    "gameBackground_00", "gameBackground_01", "gameBackground_02", "gameBackground_03", 
+    "gameBackground_04", "gameBackground_05", "gameBackground_06", "gameBackground_07", 
+    "gameBackground_08", "gameBackground_09", "gameBackground_10", "gameBackground_11", 
+    "gameBackground_12", "gameBackground_13", "gameBackground_14", "gameBackground_15" ],
+
   "physDataMap": {
     "start": {
       "bodyType": "StaticBody",
